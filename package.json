@@ -1,0 +1,30 @@
+{
+  "name": "auth-session",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/wagnrrt/auth-session#readme",
+  "bugs": {
+    "url": "https://github.com/wagnrrt/auth-session/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wagnrrt/auth-session.git"
+  },
+  "license": "MIT",
+  "author": "",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.1",
+    "fastify": "^5.8.4",
+    "mysql2": "^3.22.0",
+    "uuid": "^13.0.0",
+    "zod": "^4.3.6"
+  }
+}
