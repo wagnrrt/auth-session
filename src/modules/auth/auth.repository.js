@@ -1,8 +1,16 @@
+import { BaseError } from "../../errors/base-error.js"
+
 export async function insertUser(c, user) {
-  await c.query(
-    'INSERT INTO users (id, name, email) VALUES (UUID_TO_BIN(?), ?, ?)',
-    [user.id, user.name, user.email]
-  )
+  try {
+    await c.query(
+      'INSERT INTO users (id, name, email) VALUES (UUID_TO_BIN(?), ?, ?)',
+      [user.id, user.name, user.email]
+    )
+  } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY')
+      throw new BaseError('this email or account is already in use.', 409)
+    throw err
+  }
 }
 
 export async function insertCredential(c, credential) {
@@ -26,4 +34,13 @@ export async function insertSession(c, session) {
       session.device,
     ]
   )
+}
+
+export async function findAuthDataByEmail(c, email) {
+  const [rows] = await c.query(
+    'SELECT BIN_TO_UUID(u.id) as id, c.password FROM users u JOIN credentials c ON u.id = c.user_id WHERE u.email = ?',
+    [email]
+  )
+
+  return rows[0] ?? null
 }

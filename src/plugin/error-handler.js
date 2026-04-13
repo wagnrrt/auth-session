@@ -1,4 +1,5 @@
 import { ZodError } from "zod"
+import { BaseError } from "../errors/base-error.js"
 
 export async function errorHandler(app) {
   app.setErrorHandler((err, req, res) => {
@@ -8,6 +9,12 @@ export async function errorHandler(app) {
       return res.code(400).send({
         error: 'invalid request data',
         // details: err.issues
+      })
+    }
+
+    if (err instanceof BaseError) {
+      return res.code(err.statusCode).send({
+        error: err.message
       })
     }
 
