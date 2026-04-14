@@ -53,3 +53,12 @@ export async function findSessionByToken(c, token) {
 
   return rows[0] ?? null
 }
+
+export async function deleteSessionById(c, id) {
+  const [rows] = await c.query(
+    'DELETE FROM sessions WHERE BIN_TO_UUID(id) = ?',
+    [id]
+  )
+
+  return rows[0] ?? null
+}

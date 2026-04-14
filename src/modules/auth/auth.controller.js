@@ -24,7 +24,7 @@ export async function signUp(request, reply) {
     sameSite: 'strict'
   })
 
-  return reply.code(201).send({ message: 'user created' })
+  return reply.code(201).send({ message: 'signUp successful' })
 }
 
 export async function signIn(request, reply) {
@@ -48,5 +48,12 @@ export async function signIn(request, reply) {
     sameSite: 'strict'
   })
 
-  return reply.code(201).send({ message: 'login successful' })
+  return reply.code(201).send({ message: 'signIn successful' })
+}
+
+export async function signOut(request, reply) {
+  console.log(request.user)
+  await authService.signOut(request.server.db, request.user.sessionId)
+  reply.clearCookie('session')
+  return reply.code(201).send({ message: 'signOut successful' })
 }
