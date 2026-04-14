@@ -13,7 +13,10 @@ export const server = Fastify({
 errorHandler(server)
 
 server.decorate('db', pool)
-server.register(cookie)
+server.register(cookie, {
+  secret: process.env.AUTH_SECRET
+})
+
 
 server.register(authRoutes)
 // server.register(userRoutes)

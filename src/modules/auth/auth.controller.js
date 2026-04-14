@@ -17,6 +17,7 @@ export async function signUp(request, reply) {
   })
 
   reply.setCookie('session', session, {
+    signed: true,
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -40,6 +41,7 @@ export async function signIn(request, reply) {
   })
 
   reply.setCookie('session', session, {
+    signed: true,
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 7 * 24 * 60 * 60 * 1000,
