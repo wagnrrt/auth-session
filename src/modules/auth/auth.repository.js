@@ -44,3 +44,12 @@ export async function findAuthDataByEmail(c, email) {
 
   return rows[0] ?? null
 }
+
+export async function findSessionByToken(c, token) {
+  const [rows] = await c.query(
+    'SELECT BIN_TO_UUID(id) as id, BIN_TO_UUID(user_id) as userId, expires_at as expiresAt FROM sessions WHERE token = ?',
+    [token]
+  )
+
+  return rows[0] ?? null
+}
