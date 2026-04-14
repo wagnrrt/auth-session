@@ -19,6 +19,8 @@ export async function authenticate(request, reply) {
 
   request.user = {
     id: session.userId,
+    name: session.name,
+    email: session.email,
     sessionId: session.id
   }
 }
