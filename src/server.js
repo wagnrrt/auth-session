@@ -17,6 +17,7 @@ server.register(cookie, {
   secret: process.env.AUTH_SECRET
 })
 
+server.decorateRequest('user', null)
 
 server.register(authRoutes)
 // server.register(userRoutes)
