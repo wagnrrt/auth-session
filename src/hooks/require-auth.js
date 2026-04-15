@@ -1,8 +1,7 @@
 import { BaseError } from "../errors/base-error.js"
-import { findSessionByToken } from "../modules/auth/auth.repository.js"
-import { hashToken } from "../utils/hash.js"
+import { validateSessionToken } from "../modules/auth/auth.service.js"
 
-export async function authenticate(request, reply) {
+export async function requireAuth(request, reply) {
   const cookie = request.cookies.session
   if (!cookie) throw new BaseError('unauthorized', 401)
 
@@ -12,7 +11,7 @@ export async function authenticate(request, reply) {
     throw new BaseError('unauthorized', 401)
   }
 
-  const session = await findSessionByToken(request.server.db, hashToken(value))
+  const session = await validateSessionToken(request.server.db, value)
   if (!session) {
     reply.clearCookie('session')
     throw new BaseError('unauthorized', 401)
