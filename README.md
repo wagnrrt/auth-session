@@ -1,6 +1,6 @@
-# 🔐 auth-session
+# auth-session
 
-> API de autenticação e gerenciamento de sessões com Fastify e MySQL
+API de autenticação e gerenciamento de sessões construída com Fastify e MySQL.
 
 <div align="center">
 
@@ -14,68 +14,36 @@
 
 ---
 
-## 📖 Sobre
+## Funcionalidades
 
-O **auth-session** é uma API RESTful de autenticação que fornece um sistema completo de gerenciamento de usuários e sessões. Construído com foco em segurança, performance e simplicidade.
+- **Sign-up** — Registro de novos usuários com hash de senha
+- **Sign-in** — Autenticação de usuários
+- **Sign-out** — Logout e invalidação de sessão
+- **Session management** — Gerenciamento de sessões com cookies assinados
+- **User-agent parsing** — Captura de OS, browser e dispositivo
+- **UUID v7** — Identificadores únicos para sessões
 
-## ✨ Funcionalidades
-
-| Funcionalidade | Descrição |
-|:--------------:|-----------|
-| 📝 **Sign-up** | Registro de novos usuários com hash de senha |
-| 🔑 **Sign-in** | Autenticação segura de usuários |
-| 🚪 **Sign-out** | Logout e invalidação de sessão |
-| 🍪 **Session management** | Gerenciamento de sessões com cookies assinados |
-| 🖥️ **User-agent parsing** | Captura de OS, browser e dispositivo |
-| 🆔 **UUID v7** | Identificadores únicos para sessões |
-
-## 🛠️ Tecnologias
-
-| Tecnologia | Versão | Finalidade |
-|------------|--------|------------|
-| ![Fastify](https://img.shields.io/badge/-303030?logo=fastify&logoColor=white) | ^5.8.4 | Framework web |
-| ![MySQL](https://img.shields.io/badge/-303030?logo=mysql&logoColor=white) | ^3.22.0 | Banco de dados |
-| ![Zod](https://img.shields.io/badge/-303030?logo=zod&logoColor=white) | ^4.3.6 | Validação de schemas |
-| ![Node.js](https://img.shields.io/badge/-303030?logo=nodedotjs&logoColor=white) | - | Runtime |
-
-### Dependências
-
-- **bcrypt** ^6.0.0 — Hash de senhas
-- **UUID** ^13.0.0 — Geração de UUIDs
-- **ua-parser-js** ^2.0.9 — Parsing de user agent
-- **@fastify/cookie** ^11.0.2 — Gerenciamento de cookies
-- **dotenv** ^17.4.1 — Variáveis de ambiente
-
-## 📦 Instalação
+## Instalação
 
 ```bash
-# Clone o repositório
-git clone https://github.com/wagnrrt/auth-session.git
-
-# Entre no diretório
-cd auth-session
-
-# Instale as dependências
 npm install
 ```
 
-## ⚙️ Configuração
+## Configuração
 
 ### 1. Variáveis de Ambiente
 
-Copie o arquivo de exemplo:
+Copie o arquivo `.env.example`:
 
 ```bash
 cp .env.example .env
 ```
 
-Configure as variáveis:
+Configure as variáveis no arquivo `.env`:
 
-| Variável | Descrição | Exemplo |
-|----------|-----------|---------|
-| `DATABASE_URL` | URL de conexão com MySQL | `mysql://user:pass@localhost:3306/db` |
-| `AUTH_SECRET` | Segredo para assinar cookies | `your-secret-key-here` |
-| `NODE_ENV` | Ambiente da aplicação | `development` ou `production` |
+- `DATABASE_URL` — URL de conexão com MySQL (ex: `mysql://user:pass@localhost:3306/db`)
+- `AUTH_SECRET` — Segredo para assinar cookies
+- `NODE_ENV` — Ambiente da aplicação (`development` ou `production`)
 
 ### 2. Banco de Dados
 
@@ -122,7 +90,7 @@ CREATE TABLE sessions (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-## 🚀 Uso
+## Uso
 
 ### Iniciar o servidor
 
@@ -130,21 +98,15 @@ CREATE TABLE sessions (
 npm run dev
 ```
 
-✅ Servidor rodando em `http://localhost:3000`
+Servidor rodando em `http://localhost:3000`
 
-## 📡 API Endpoints
+## API Endpoints
 
-### `POST /auth/sign-up`
+### POST /auth/sign-up
 
-Registra um novo usuário e cria uma sessão automaticamente.
+Registra um novo usuário e cria uma sessão.
 
-| Campo | Tipo | Obrigatório | Descrição |
-|-------|:----:|:-----------:|-----------|
-| `name` | string | ✅ | Nome do usuário (2-255 caracteres) |
-| `email` | string | ✅ | Email válido (max 255 caracteres) |
-| `password` | string | ✅ | Senha (8-255 caracteres) |
-
-**Exemplo:**
+**Body:**
 ```json
 {
   "name": "John Doe",
@@ -153,24 +115,25 @@ Registra um novo usuário e cria uma sessão automaticamente.
 }
 ```
 
-| Status | Descrição |
-|:------:|-----------|
-| ![201](https://img.shields.io/badge/201-Created-success?style=for-the-badge) | Usuário registrado com sucesso |
-| ![400](https://img.shields.io/badge/400-Bad%20Request-red?style=for-the-badge) | Dados inválidos |
-| ![409](https://img.shields.io/badge/409-Conflict-orange?style=for-the-badge) | Email já em uso |
+**Campos:**
+
+- `name` (string, obrigatório) — Nome do usuário (2-255 caracteres)
+- `email` (string, obrigatório) — Email válido (max 255 caracteres)
+- `password` (string, obrigatório) — Senha (8-255 caracteres)
+
+**Respostas:**
+
+- `201` — Usuário registrado com sucesso
+- `400` — Dados inválidos
+- `409` — Email já em uso
 
 ---
 
-### `POST /auth/sign-in`
+### POST /auth/sign-in
 
 Autentica um usuário e cria uma sessão.
 
-| Campo | Tipo | Obrigatório | Descrição |
-|-------|:----:|:-----------:|-----------|
-| `email` | string | ✅ | Email do usuário |
-| `password` | string | ✅ | Senha do usuário |
-
-**Exemplo:**
+**Body:**
 ```json
 {
   "email": "john@example.com",
@@ -178,55 +141,52 @@ Autentica um usuário e cria uma sessão.
 }
 ```
 
-| Status | Descrição |
-|:------:|-----------|
-| ![200](https://img.shields.io/badge/200-OK-success?style=for-the-badge) | Login realizado com sucesso |
-| ![400](https://img.shields.io/badge/400-Bad%20Request-red?style=for-the-badge) | Dados inválidos |
-| ![401](https://img.shields.io/badge/401-Unauthorized-red?style=for-the-badge) | Credenciais inválidas |
+**Campos:**
+
+- `email` (string, obrigatório) — Email do usuário
+- `password` (string, obrigatório) — Senha do usuário
+
+**Respostas:**
+
+- `200` — Login realizado com sucesso
+- `400` — Dados inválidos
+- `401` — Credenciais inválidas
 
 ---
 
-### `POST /auth/sign-out`
+### POST /auth/sign-out
 
 Encerra a sessão do usuário autenticado.
 
 **Headers:**
 
-| Header | Valor |
-|--------|-------|
-| `Cookie` | `session=<token>` |
+- `Cookie: session=<token>`
 
-| Status | Descrição |
-|:------:|-----------|
-| ![200](https://img.shields.io/badge/200-OK-success?style=for-the-badge) | Logout realizado com sucesso |
-| ![401](https://img.shields.io/badge/401-Unauthorized-red?style=for-the-badge) | Não autorizado |
+**Respostas:**
 
----
+- `200` — Logout realizado com sucesso
+- `401` — Não autorizado
 
-## 🍪 Cookies
+## Cookies
 
 A API utiliza cookies assinados para gerenciamento de sessão:
 
-| Propriedade | Valor |
-|-------------|:-----:|
-| **Nome** | `session` |
-| **HttpOnly** | `true` |
-| **Secure** | `true` (em produção) |
-| **SameSite** | `strict` |
-| **Path** | `/` |
-| **MaxAge** | 7 dias |
+- **Nome:** `session`
+- **HttpOnly:** `true`
+- **Secure:** `true` (em produção)
+- **SameSite:** `strict`
+- **Path:** `/`
+- **MaxAge:** 7 dias
 
-## ⚠️ Tratamento de Erros
+## Tratamento de Erros
 
-| Código | Mensagem | Descrição |
-|:------:|----------|-----------|
-| ![400](https://img.shields.io/badge/400-Bad%20Request-red?style=for-the-badge) | `invalid request data` | Erro de validação dos dados |
-| ![401](https://img.shields.io/badge/401-Unauthorized-red?style=for-the-badge) | `unauthorized` | Sessão inválida ou expirada |
-| ![401](https://img.shields.io/badge/401-Unauthorized-red?style=for-the-badge) | `invalid credentials` | Email ou senha incorretos |
-| ![409](https://img.shields.io/badge/409-Conflict-orange?style=for-the-badge) | `this email or account is already in use` | Email já cadastrado |
-| ![500](https://img.shields.io/badge/500-Internal%20Server%20Error-critical?style=for-the-badge) | `internal server error` | Erro interno do servidor |
+- `400` — `invalid request data` (erro de validação)
+- `401` — `unauthorized` (sessão inválida ou expirada)
+- `401` — `invalid credentials` (email ou senha incorretos)
+- `409` — `this email or account is already in use` (email já cadastrado)
+- `500` — `internal server error` (erro interno do servidor)
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 src/
@@ -251,16 +211,6 @@ src/
 └── server.js
 ```
 
-## 📄 Licença
+## Licença
 
-Este projeto está sob a licença **MIT**.
-
----
-
-<div align="center">
-
-**Feito com ❤️ por [wagnrrt](https://github.com/wagnrrt)**
-
-[![GitHub](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white&style=for-the-badge)](https://github.com/wagnrrt/auth-session)
-
-</div>
+MIT
