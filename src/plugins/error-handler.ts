@@ -1,4 +1,4 @@
-import type { FastifyInstance } from "fastify"
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import { ZodError } from "zod"
 
 export class BaseError extends Error {
@@ -10,22 +10,22 @@ export class BaseError extends Error {
   }
 }
 
-export async function errorHandler(app: FastifyInstance) {
-  app.setErrorHandler((err, req, res) => {
+export function errorHandler(app: FastifyInstance) {
+  app.setErrorHandler((err, request, reply) => {
 
     if (err instanceof ZodError) {
-      return res.code(400).send({
+      return reply.code(400).send({
         error: 'invalid request data',
       })
     }
 
     if (err instanceof BaseError) {
-      return res.code(err.statusCode).send({
+      return reply.code(err.statusCode).send({
         error: err.message
       })
     }
 
-    return res.code(500).send({
+    return reply.code(500).send({
       error: 'internal server error'
     })
   })
